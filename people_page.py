@@ -52,7 +52,7 @@ def people_page(user_id):
         dob = st.date_input(
                 "Date of Birth",
                 min_value=datetime.date(1920, 1, 1),
-                max_value=datetime.date.today())
+                max_value=datetime.date.today()
         )
         id_code = st.text_input("ID Doc Code")
         place_id = st.text_input("Place")
