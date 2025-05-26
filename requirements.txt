@@ -1,0 +1,7 @@
+streamlit
+firebase-admin
+pyrebase
+gspread
+oauth2client
+pandas
+
