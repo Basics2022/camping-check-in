@@ -5,7 +5,13 @@ import pandas as pd
 from firebase_admin import firestore
 from datetime import datetime
 
+import smtplib
+from email.mime.text import MIMEText
+
 def show_latest_checkins(user_id):
+    """ 
+    Show a table collecting the latest checkins at the end of the page
+    """
     db = firestore.client()
     checkins_ref = db.collection("checkins").where("userId", "==", user_id)
     docs = checkins_ref.stream()
@@ -29,7 +35,30 @@ def show_latest_checkins(user_id):
     else:
         st.info("No recent check-ins found.")
 
+
+def send_email_confirmation(to_email, checkin_data):
+    """  """
+
+
+def send_email_police(to_email, checkin_data):
+    """  """
+
+
+def send_email_tourism(to_email, checkin_data):
+    """  """
+
+
+
+
 def checkin_page(user):
+    """
+    Check-in page, layout and some functionalities
+    - check-in form
+    - show latest checkins
+
+    **todo**: clean the implementation, keeping layout and functions apart
+
+    """
     st.title("📝 Check-In")
 
     user_id = user["localId"]
@@ -64,6 +93,8 @@ def checkin_page(user):
             else:
                 save_checkin(user_id, selected_ids, str(checkin_date), str(checkout_date), num_guests, vehicle_plate)
                 st.success("✅ Check-in recorded successfully.")
+
+                #> Send emails: confirmation, police, tourism agency,...
 
     #> Show recent check-ins
     show_latest_checkins(user_id)
