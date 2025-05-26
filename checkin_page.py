@@ -54,7 +54,7 @@ def checkin_page(user):
         checkout_date = st.date_input("Check-Out Date")
         num_guests = st.number_input(
                 "Number of Guests", min_value=0, step=1, value=1)
-        # vehicle_plate = st.text_input("Vehicle Plate (optional)")
+        vehicle_plate = st.text_input("Vehicle Plate (optional)")
 
         submitted = st.form_submit_button("Submit Check-In")
 

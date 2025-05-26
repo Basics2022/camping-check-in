@@ -1,22 +1,24 @@
 import firebase_admin
+import json
 
 import streamlit as st
 from firebase_admin import credentials, firestore, storage
 # from google.oauth2 import service_account
-# from google.oauth2.service_account import Credentials
+from google.oauth2.service_account import Credentials
 from oauth2client.service_account import ServiceAccountCredentials
 import gspread
 from datetime import datetime
 import uuid
 import os
 
-FIREBASE_SERVICE_ACCOUNT_JSON  = '.credentials/firebase_service_account.json')
-GOOGLE_SHEETS_CREDENTIALS_JSON = '.credentials/google_sheets_credentials.json')
+FIREBASE_SERVICE_ACCOUNT_JSON  = '.credentials/camping-check-in-firebase-key.json'   # 'firebase_service_account.json'
+GOOGLE_SHEETS_CREDENTIALS_JSON = '.credentials/camping-check-in-sheets-key.json'     # 'google_sheets_credentials.json'
 
+service_account_info = json.loads(st.secrets["firebase-key"]["service_account_key"])
 
 # --- Firebase Initialization ---
 if not firebase_admin._apps:
-    cred = credentials.Certificate(FIREBASE_SERVICE_ACCOUNT_JSON)
+    cred = credentials.Certificate(service_account_info) # FIREBASE_SERVICE_ACCOUNT_JSON)
     firebase_admin.initialize_app(cred, {
         "storageBucket": "camping-check-in.firebasestorage.app",
     })
@@ -29,7 +31,19 @@ bucket = storage.bucket()
 # credentials = Credentials.from_service_account_file("google_sheets_credentials.json", scopes=scope)
 # gc = gspread.authorize(credentials)
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/spreadsheets"]
-creds = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_SHEETS_CREDENTIALS, scope)
+#> old
+creds = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_SHEETS_CREDENTIALS_JSON, scope)
+# #> new
+gs_creds_info = json.loads(st.secrets["google-sheets"]["credentials_json"])
+
+
+print("gs_creds_info: \n", gs_creds_info)
+creds2 = Credentials.from_service_account_info(gs_creds_info, scopes=scope)
+
+print("creds   : \n", creds )
+print("creds 2.: \n", creds2)
+
+
 client = gspread.authorize(creds)
 sheet = client.open("CampingPeople").worksheet("People")  # Ensure this sheet/tab exists
 

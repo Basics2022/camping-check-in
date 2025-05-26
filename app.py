@@ -1,12 +1,11 @@
 import streamlit as st
-from firebase_admin import auth
+import json
 import pyrebase
 from people_page import people_page
 from checkin_page import checkin_page  # if you separate that page too
 
-from firebase_config import firebase_config, EMAIL_ADDRESS, EMAIL_PASSWORD
-
-#> Initialize app with Firebase configuration
+#> App initialization
+firebase_config = json.loads(st.secrets["firebase"]['firebase_config'])
 firebase = pyrebase.initialize_app(firebase_config)
 auth = firebase.auth()
 
