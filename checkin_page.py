@@ -65,6 +65,11 @@ def send_email_confirmation(to_email, checkin_data):
     msg["From"] = smtp_user
     msg["To"] = to_email
 
+    print()
+    print("Debug, in send_email_confirmation()")
+    print("msg: \n", msg)
+    print()
+
     with smtplib.SMTP_SSL(smtp_server, 465) as server:
         server.login(smtp_user, smtp_pswd)
         server.send_message(msg)
