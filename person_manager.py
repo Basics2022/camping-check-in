@@ -11,8 +11,8 @@ from datetime import datetime
 import uuid
 import os
 
-FIREBASE_SERVICE_ACCOUNT_JSON  = '.credentials/camping-check-in-firebase-key.json'   # 'firebase_service_account.json'
-GOOGLE_SHEETS_CREDENTIALS_JSON = '.credentials/camping-check-in-sheets-key.json'     # 'google_sheets_credentials.json'
+# FIREBASE_SERVICE_ACCOUNT_JSON  = '.credentials/camping-check-in-firebase-key.json'   # 'firebase_service_account.json'
+# GOOGLE_SHEETS_CREDENTIALS_JSON = '.credentials/camping-check-in-sheets-key.json'     # 'google_sheets_credentials.json'
 
 service_account_info = json.loads(st.secrets["firebase-key"]["service_account_key"])
 
@@ -36,10 +36,10 @@ gs_creds_info = json.loads(st.secrets["google-sheets"]["credentials_json"])
 creds = Credentials.from_service_account_info(gs_creds_info, scopes=scope)
 client = gspread.authorize(creds)
 
-print('debug -------------------- ')
-print(gs_creds_info['client_email'])
-print(creds.scopes)
-print('debug -------------------- ')
+# print('debug -------------------- ')
+# print(gs_creds_info['client_email'])
+# print(creds.scopes)
+# print('debug -------------------- ')
 
 sheet = client.open("CampingPeople").worksheet("People")  # Ensure this sheet/tab exists
 

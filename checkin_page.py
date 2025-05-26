@@ -5,8 +5,18 @@ import pandas as pd
 from firebase_admin import firestore
 from datetime import datetime
 
+import json
 import smtplib
 from email.mime.text import MIMEText
+
+
+#> Read smtp parameters from .streamlit/secrets.toml
+smtp_params = json.loads(st.secrets["email"]['smtp_params']) 
+smtp_server = smtp_params['smtp_server']
+smtp_port   = smtp_params['smtp_port']
+smtp_user   = smtp_params['smtp_user']
+smtp_pswd   = smtp_params['smtp_password']
+
 
 def show_latest_checkins(user_id):
     """ 
@@ -38,6 +48,27 @@ def show_latest_checkins(user_id):
 
 def send_email_confirmation(to_email, checkin_data):
     """  """
+    # 0. basic plain text version
+    msg = MIMEText(f"Check-in confirmation:\nDate-In: {checkin_data['checkInDate']}\nDate-Out: {checkin_data['checkOutDate']}\nPeople: {checkin_data['people']}\nGuests: {checkin_data['numGuests']}")
+    # # 1. html formatting
+    # html = """\
+    # <html>
+    #   <body>
+    #     <p>
+    #       <b>Check-In Confirmation</b><br>
+    #     </p>
+    #   </body>
+    # </html>
+    # """
+
+    msg["Subject"] = f"Camping Monte Rosa. Check-In {checkin_data['checkInDate']}-{checkin_data['checkOutDate']}"
+    msg["From"] = smtp_user
+    msg["To"] = to_email
+
+    with smtplib.SMTP_SSL(smtp_server, 465) as server:
+        server.login(smtp_user, smtp_pswd)
+        server.send_message(msg)
+
 
 
 def send_email_police(to_email, checkin_data):
@@ -46,8 +77,6 @@ def send_email_police(to_email, checkin_data):
 
 def send_email_tourism(to_email, checkin_data):
     """  """
-
-
 
 
 def checkin_page(user):
@@ -95,6 +124,9 @@ def checkin_page(user):
                 st.success("✅ Check-in recorded successfully.")
 
                 #> Send emails: confirmation, police, tourism agency,...
+                people_names = [ p[1] for p in people_list if p[0] in selected_ids ]
+                confirmation_data = {'people': people_names, 'numGuests': num_guests, 'checkInDate': str(checkin_date), 'checkOutDate': str(checkout_date)}
+                send_email_confirmation(st.session_state.user['email'], confirmation_data)
 
     #> Show recent check-ins
     show_latest_checkins(user_id)
