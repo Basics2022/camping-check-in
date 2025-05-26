@@ -1,5 +1,6 @@
 streamlit
 firebase-admin
+setuptools
 pyrebase4
 gspread
 oauth2client
