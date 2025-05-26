@@ -27,10 +27,7 @@ def people_page(user_id):
                 with st.form(f"edit_form_{people[index]['id']}"):
                     name = st.text_input("Name", value=row["name"])
                     surname = st.text_input("Surname", value=row["surname"])
-                    dob = st.date_input(
-                            "Date of Birth", 
-                            value=pd.to_datetime(row["dob"]),
-                    )
+                    dob = st.date_input("Date of Birth", value=pd.to_datetime(row["dob"]) )
                     id_code = st.text_input("ID Doc Code", value=row["id_code"])
                     place_id = st.text_input("Place", value=row.get("place_id", ""))
                     submitted = st.form_submit_button("Save")
