@@ -27,24 +27,20 @@ db = firestore.client()
 bucket = storage.bucket()
 
 # --- Google Sheets Initialization ---
-# scope = ["https://www.googleapis.com/auth/spreadsheets"]
-# credentials = Credentials.from_service_account_file("google_sheets_credentials.json", scopes=scope)
-# gc = gspread.authorize(credentials)
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/spreadsheets"]
-#> old
-creds = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_SHEETS_CREDENTIALS_JSON, scope)
+# #> old
+# scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/spreadsheets"]
+# creds = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_SHEETS_CREDENTIALS_JSON, scope)
 # #> new
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/spreadsheets"]
 gs_creds_info = json.loads(st.secrets["google-sheets"]["credentials_json"])
-
-
-print("gs_creds_info: \n", gs_creds_info)
-creds2 = Credentials.from_service_account_info(gs_creds_info, scopes=scope)
-
-print("creds   : \n", creds )
-print("creds 2.: \n", creds2)
-
-
+creds = Credentials.from_service_account_info(gs_creds_info, scopes=scope)
 client = gspread.authorize(creds)
+
+print('debug -------------------- ')
+print(gs_creds_info['client_email'])
+print(creds.scopes)
+print('debug -------------------- ')
+
 sheet = client.open("CampingPeople").worksheet("People")  # Ensure this sheet/tab exists
 
 
