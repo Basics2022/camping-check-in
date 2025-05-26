@@ -30,8 +30,6 @@ def people_page(user_id):
                     dob = st.date_input(
                             "Date of Birth", 
                             value=pd.to_datetime(row["dob"]),
-                            min_value=datetime.date(1920, 1, 1),
-                            max_value=datetime.date.today()
                     )
                     id_code = st.text_input("ID Doc Code", value=row["id_code"])
                     place_id = st.text_input("Place", value=row.get("place_id", ""))
@@ -53,7 +51,10 @@ def people_page(user_id):
     with st.form("add_person_form"):
         name = st.text_input("Name")
         surname = st.text_input("Surname")
-        dob = st.date_input("Date of Birth")
+        dob = st.date_input(
+                "Date of Birth",
+                min_value=datetime.date(1920, 1, 1),
+                max_value=datetime.date.today())
         id_code = st.text_input("ID Doc Code")
         place_id = st.text_input("Place")
         file = st.file_uploader("Upload ID PDF", type=["pdf"])
