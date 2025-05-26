@@ -1,4 +1,5 @@
 
+.*
 firebase_config.py
 .credentials
 .streamlit
