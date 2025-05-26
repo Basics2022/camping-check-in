@@ -50,8 +50,9 @@ def people_page(user_id):
         surname = st.text_input("Surname")
         dob = st.date_input(
                 "Date of Birth",
-                min_value=datetime.date(1920, 1, 1),
-                max_value=datetime.date.today())
+                )
+                # min_value=datetime.date(1920, 1, 1),
+                # max_value=datetime.date.today())
         id_code = st.text_input("ID Doc Code")
         place_id = st.text_input("Place")
         file = st.file_uploader("Upload ID PDF", type=["pdf"])
