@@ -1,5 +1,6 @@
 import streamlit as st
 from person_manager import db, save_checkin
+from checkin_manager import update_checkin
 
 import pandas as pd
 from firebase_admin import firestore
@@ -19,14 +20,6 @@ smtp_pswd   = smtp_params['smtp_password']
 
 
 db = firestore.client()
-
-def update_checkin(checkin_id, updated_fields):
-    """  """
-    # debug ---
-    # st.write(f"in update_checkin(), checkin_id: {checkin_id}")
-    # st.write(f"in update_checkin(), updated_fields: {updated_fields}")
-    doc_ref = db.collection("checkins").document(checkin_id)
-    doc_ref.update(updated_fields)
 
 def show_latest_checkins(user_id):
     """ 
