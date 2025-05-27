@@ -18,6 +18,16 @@ smtp_user   = smtp_params['smtp_user']
 smtp_pswd   = smtp_params['smtp_password']
 
 
+db = firestore.client()
+
+def update_checkin(checkin_id, updated_fields):
+    """  """
+    # debug ---
+    # st.write(f"in update_checkin(), checkin_id: {checkin_id}")
+    # st.write(f"in update_checkin(), updated_fields: {updated_fields}")
+    doc_ref = db.collection("checkins").document(checkin_id)
+    doc_ref.update(updated_fields)
+
 def show_latest_checkins(user_id):
     """ 
     Show a table collecting the latest checkins at the end of the page
@@ -31,6 +41,7 @@ def show_latest_checkins(user_id):
         data = doc.to_dict()
         checkin_data.append({
             "Date": data.get("timestamp", ""), # [:16].replace("T", " "),
+            "Status": data.get("status"),
             "People": ", ".join(data.get("peopleIds", [])),
             "checkInDate": data.get("checkInDate"),
             "checkOutDate": data.get("checkOutDate"),
@@ -43,7 +54,7 @@ def show_latest_checkins(user_id):
         st.subheader("🕓 Latest Check-ins")
         st.dataframe(df, use_container_width=True)
     else:
-        st.info("No recent check-ins found.")
+        st.info("No recent check-in found.")
 
 
 def send_email_confirmation(to_email, checkin_data):
@@ -125,13 +136,15 @@ def checkin_page(user):
             if not selected_ids:
                 st.error("Please select at least one guest.")
             else:
-                save_checkin(user_id, selected_ids, str(checkin_date), str(checkout_date), num_guests, vehicle_plate)
+                save_checkin(user_id, selected_ids, str(checkin_date), str(checkout_date), num_guests, vehicle_plate, status="pending")
                 st.success("✅ Check-in recorded successfully.")
 
-                #> Send emails: confirmation, police, tourism agency,...
-                people_names = [ p[1] for p in people_list if p[0] in selected_ids ]
-                confirmation_data = {'people': people_names, 'numGuests': num_guests, 'checkInDate': str(checkin_date), 'checkOutDate': str(checkout_date)}
-                send_email_confirmation(st.session_state.user['email'], confirmation_data)
+                #> Send emails: confirmation, police, tourism agency...
+                # moved to admin_page. Email sent after a check-in is
+                # accepted
+                # people_names = [ p[1] for p in people_list if p[0] in selected_ids ]
+                # confirmation_data = {'people': people_names, 'numGuests': num_guests, 'checkInDate': str(checkin_date), 'checkOutDate': str(checkout_date)}
+                # send_email_confirmation(st.session_state.user['email'], confirmation_data)
 
     #> Show recent check-ins
     show_latest_checkins(user_id)

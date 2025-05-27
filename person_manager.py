@@ -90,13 +90,15 @@ def save_person(user_id, name, surname, dob, id_code, file, place_id):
 def delete_person(user_id, person_id):
     db.collection("people").document(person_id).delete()
     # Optional: no Google Sheets delete unless syncing
+    # **todo**
 
 def update_person(user_id, person_id, updated_fields):
     doc_ref = db.collection("people").document(person_id)
     doc_ref.update(updated_fields)
     # Optional: log update to sheet as an update log
+    # **todo**
 
-def save_checkin(user_id, people_ids, checkin_date, checkout_date, num_guests, vehicle_plate=""):
+def save_checkin(user_id, people_ids, checkin_date, checkout_date, num_guests, vehicle_plate="", status="pending"):
     checkin_data = {
         "userId": user_id,
         "peopleIds": people_ids,
@@ -105,6 +107,7 @@ def save_checkin(user_id, people_ids, checkin_date, checkout_date, num_guests, v
         "numGuests": num_guests,
         "vehiclePlate": vehicle_plate,
         "timestamp": datetime.utcnow(),
+        "status": status
     }
 
     doc_ref = db.collection("checkins").document()
@@ -114,7 +117,7 @@ def save_checkin(user_id, people_ids, checkin_date, checkout_date, num_guests, v
     row = [
         str(doc_ref.id), user_id, ", ".join(people_ids), checkin_date, 
         checkout_date, num_guests, vehicle_plate,
-        str(datetime.utcnow())
+        str(datetime.utcnow()), status
     ]
     sheet = client.open("CampingPeople").worksheet("CheckIns")  # tab must exist
     sheet.append_row(row)
