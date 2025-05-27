@@ -54,7 +54,8 @@ def admin_page(user):
                     # ...
 
                     #> Print success message to the webpage
-                    st.success("Checkin Accepted")
+                    st.success("Checkin Accepted Successfully!")
+                    st.rerun()
 
     else:
         st.info("No recent check-in request")

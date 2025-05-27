@@ -44,7 +44,7 @@ def people_page(user_id):
                             "id_code": id_code,
                             "place_id": place_id
                         })
-                        st.success("Updated successfully.")
+                        st.success("Updated successfully!")
                         st.rerun()
     else:
         st.info("No people added yet.")
