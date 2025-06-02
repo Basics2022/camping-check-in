@@ -30,12 +30,14 @@ def login():
 
 # --- Dashboard ---
 def dashboard():
+    #> Sidebar
     st.sidebar.title("Menu")
     if ( st.session_state.user['email'] in admin_info['emails'] ):
         choice = st.sidebar.radio("Go to", ["Admin", "👤 People", "📝 Check-in", "🔓 Logout"])
     else:
         choice = st.sidebar.radio("Go to", ["👤 People", "📝 Check-in", "🔓 Logout"])
 
+    #> Sidebar-radio-dependent body content
     if choice == "Admin":
         admin_page(st.session_state.user)
     elif choice == "👤 People":
