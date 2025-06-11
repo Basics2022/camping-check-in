@@ -3,5 +3,6 @@ firebase-admin
 pyrebase4
 gspread
 oauth2client
+setuptools
 pandas
 
